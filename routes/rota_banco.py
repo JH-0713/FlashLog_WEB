@@ -158,11 +158,12 @@ def put_cliente(nome,cpf,telefone,endereco,rua,numero_casa,var_id):
 
     return dados.json()
 
-def put_encomenda(remetente,var_id):
+def put_encomenda(remetente,cliente_id,var_id):
     url_ = f"{url}/put_encomenda/{var_id}"
 
     dados_encomenda = {
-        "remetente": remetente
+        "remetente": remetente,
+        "cliente_id": cliente_id
     }
 
     dados = requests.put(url_, json=dados_encomenda)

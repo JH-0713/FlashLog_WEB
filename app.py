@@ -165,11 +165,12 @@ def pesquisar_encomenda():
 def edit_encomenda(var_id):
     if request.method == 'POST':
         remetente = request.form.get("form-remetente")
-        if not remetente:
+        cliente_id = request.form.get("form-cliente_id")
+        if not remetente or cliente_id:
             print(f'error: valores invalidos')
             return redirect(url_for("encomendas"))
         try:
-            put_encomenda(remetente,var_id)
+            put_encomenda(remetente,cliente_id,var_id)
             return redirect(url_for("encomendas"))
         except Exception as e:
             print(e)
