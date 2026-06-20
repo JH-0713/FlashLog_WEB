@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="flash-error px-3">
+    <!--  percorrer a lista de mensagens  -->
+    {% for category, message in messages %}
+    <!--  Criar um card pai e filho  -->
+    <div class="alert alert-{{ category }} alert-dismissible fade show px-5" role="alert">
+        <strong>{{ message }}</strong>.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<div class="pesquisa-encomendas">
+    <button type="button" class="botao btn btn-primary" data-bs-toggle="modal" data-bs-target="#cadastro_galpao">
+        Cadastrar galpão
+    </button>
+</div>
+<div class="modal fade" id="cadastro_galpao" tabindex="-1" aria-labelledby="mostrar2" aria-hidden="true">
+    <form id="form-cadastro_galpao" action="{{ url_for('cadastrar_galpao') }}" method="post">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="mostrar2">Cadastrar cliente</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-cep">
+                        <div>
+                            <label>
+                                CEP
+                                <input id="form-cep" placeholder="Digite seu CEP" name="form-cep"
+                                       class="form-modal">
+                            </label>
+                        </div>
+                        <a type="submit" onclick="get_cep()" class="botao_cep btn btn-primary">Buscar</a>
+
+                    </div>
+                    <div>
+                        <label>
+                            Cidade
+                            <input id="form-cidade" placeholder="Cidade" name="form-cidade"
+                                   class="form-modal" value="" disabled>
+                        </label>
+                        <label>
+                            Estado
+                            <input id="form-uf" placeholder="Estado" name="form-uf"
+                                   class="form-modal" value="" disabled>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Fechar
+                    </button>
+                    <button type="submit" class="btn btn-info">Lançar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<table class="table table-dark table-striped-columns">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Cidade</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for i in var_galpoes %}
+    <tr>
+        <td>{{i["id_galpao"]}}</td>
+        <td>{{i["cidade"]}}</td>
+        <td>{{i["estado"]}}</td>
+        <td>
+            <a data-bs-toggle="modal" data-bs-target="#editar_galp{{i['id_galpao']}}"><i
+                    class="bi bi-pencil-square text-primary fs-6"></i></a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% for i in var_galpoes %}
+<div class="modal fade" id="editar_galp{{i['id_galpao']}}" tabindex="-1" aria-labelledby="edit_ga{{i['id_galpao']}}"
+     aria-hidden="true">
+    <form id="form-cadastro" action="{{ url_for('cadastrar_galpao',var_id = i['id_galpao']) }}" method="post">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="edit_ga{{i['id_galpao']}}">Editar Galpão {{i.id_galpao}}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-cep">
+                        <div>
+                            <label>
+                                CEP
+                                <input id="form-cepe{{i['id_galpao']}}" placeholder="Digite seu CEP" name="form-cep"
+                                       class="form-modal">
+                            </label>
+                        </div>
+                        <a type="submit" onclick="get_cep1('{{ i.id_galpao }}')" class="botao_cep btn btn-primary">Buscar</a>
+                    </div>
+                    <label>
+                        Cidade:
+                        <input placeholder="Cidade" name="form-cidade"  class="form-modal" value="{{i['cidade']}}"
+                               id="form-cidadee{{ i.id_galpao }}" readonly>
+                    </label>
+                    <label>
+                        Estado:
+                        <input placeholder="Estado" name="form-estado"
+                               class="form-modal" value="{{i['estado']}}" id="form-ufe{{ i.id_galpao }}" readonly>
+                    </label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Fechar
+                    </button>
+                    <button type="submit" class="btn btn-info">Lançar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endfor %}
+
+<script src="/static/js/get_cep.js"></script>
+{% endblock conteudo %}

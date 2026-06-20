@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+<div class="pesquisa-encomendas">
+    <button type="button" class="botao btn btn-primary" data-bs-toggle="modal" data-bs-target="#cadastro">
+        Lançar movimentação
+    </button>
+</div>
+<div class="modal fade" id="cadastro" tabindex="-1" aria-labelledby="mostrar1" aria-hidden="true">
+    <form id="form-cadastro" action="{{ url_for('cadastrar_movimentacao') }}" method="post">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="mostrar1">Lançar movimentação</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label>
+                        Galpão
+                        <select class="form-select" aria-label="Default select example" name="form-galpao">
+                            <option selected>Selecione um galpao da movimentação</option>
+                            {% for i in var_galpo %}
+                            <option value="{{i['id_galpao']}}">{{i['cidade']}}/{{i["estado"]}}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label>
+                        Encomenda
+                        <select class="form-select" aria-label="Default select example" name="form-encomenda">
+                            <option selected>Selecione a encomenda da movimentação</option>
+                            {% for i in var_encom %}
+                            {% if i["encomenda"]["status_encomenda"] == "ENTREGUE" %}
+                            {% else %}
+                            <option value="{{i['encomenda']['id_encomenda']}}">{{i["cliente"]["nome"]}} -
+                                {{i["encomenda"]["codigo_r"]}}
+                            </option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </label>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Fechar
+                    </button>
+                    <button type="submit" class="btn btn-info">Lançar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--Lista-->
+
+<table class="table table-dark table-striped-columns">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Data</th>
+        <th scope="col">Localização</th>
+        <th scope="col">Encomenda</th>
+        <th scope="col">Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for i in var_movi %}
+    <tr>
+        <td>{{i["movimentacao"]["id_movimentacao"]}}</td>
+        <td>{{i["movimentacao"]["data_atual"]}}</td>
+        <td>{{i["galpoes"]["cidade"]}}/{{i["galpoes"]["estado"]}}</td>
+        <td>{{i["clientes"]["nome"]}} - {{i['encomendas']['codigo_r']}}</td>
+        {% if i["movimentacao"]["status_movimentacao"] == "ENTRADA" %}
+        <td>
+            <div class="status_encomenda bg-warning">Entrada</div>
+        </td>
+        {% else %}
+        <td>
+            <div class="status_encomenda bg-info">Saida</div>
+        </td>
+        {% endif %}
+
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock conteudo %}
