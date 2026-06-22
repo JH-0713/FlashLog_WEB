@@ -40,23 +40,17 @@
                         Remetente
                         <select class="form-select" aria-label="Default select example" name="form-remetente"
                                 id="remetente_1">
-                            <option selected>Selecione o Remetente</option>
-                            <option value="Mercado Livre">Mercado Livre</option>
-                            <option value="Amazon">Amazon</option>
-                            <option value="Shopee">Shopee</option>
-                            <option value="Magazine Luiza">Magazine Luiza</option>
-                            <option value="AliExpress">AliExpress</option>
-                            <option value="Shein">Shein</option>
-                            <option value="Americanas">Americanas</option>
-                            <option value="Casas Bahia">Casas Bahia</option>
-                            <option value="OLX">OLX</option>
+                            <option selected value="">Selecione o Remetente</option>
+                            {% for i in market_place %}
+                            <option value="{{i}}">{{i}}</option>
+                            {% endfor %}
                         </select>
                     </label>
                     <label for="destinatario">
                         Destinatário
                         <select class="form-select" aria-label="Default select example" name="form-cliente_id"
                                 id="destinatario">
-                            <option selected>Selecione seu Destinatário</option>
+                            <option selected value="">Selecione seu Destinatário</option>
                             {% for i in var_cliente %}
                             <option value="{{i['id_cliente']}}">{{i['id_cliente']}} -
                                 {{i['nome']}}
@@ -133,36 +127,41 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="mostrar_enco{{i['encomenda']['id_encomenda']}}"><i
                             class="bi bi-pencil-square text-primary fs-6"></i> Editar Encomenda
-                        {{i['encomenda']['id_encomenda']}}</h1>
+                        {{i['encomenda']['id_encomenda']}} - {{i['encomenda']['codigo_r']}}</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <label for="remetente">
-                        Remetente
-                        <select class="form-select" aria-label="Default select example" name="form-remetente"
-                                id="remetente">
-                            <option selected>Selecione o novo Remetente</option>
-                            <option value="Mercado Livre">Mercado Livre</option>
-                            <option value="Amazon">Amazon</option>
-                            <option value="Shopee">Shopee</option>
-                            <option value="Magazine Luiza">Magazine Luiza</option>
-                            <option value="AliExpress">AliExpress</option>
-                            <option value="Shein">Shein</option>
-                            <option value="Americanas">Americanas</option>
-                            <option value="Casas Bahia">Casas Bahia</option>
-                            <option value="OLX">OLX</option>
+                    <label>
+                        Novo Remetente
+                        <select class="form-select" aria-label="Default select example" name="form-remetente">
+                            {% for i1 in market_place %}
+                            {% if i1 == i['encomenda']['remetente'] %}
+                            <option value="{{i1}}" selected>
+                                {{i1}}
+                            </option>
+                            {% else %}
+                            <option value="{{i}}">
+                                {{i1}}
+                            </option>
+                            {% endif %}
+                            {% endfor %}
                         </select>
                     </label>
                     <label>
-                        Destinatário
-                        <select class="form-select" aria-label="Default select example" name="form-cliente_id"
-                                >
-                            <option selected>Selecione seu Destinatário</option>
-                            {% for i in var_cliente %}
-                            <option value="{{i['id_cliente']}}">{{i['id_cliente']}} -
-                                {{i['nome']}}
+                        Novo Destinatário
+                        <select class="form-select" aria-label="Default select example" name="form-cliente_id">
+                            {% for i1 in var_cliente %}
+                            {% if i1['id_cliente'] == i['encomenda']['cliente_id'] %}
+                            <option value="{{i1['id_cliente']}}" selected>
+                                {{i1['id_cliente']}} - {{i1['nome']}}
                             </option>
+
+                            {% else %}
+                            <option value="{{i1['id_cliente']}}">
+                                {{i1['id_cliente']}} - {{i1['nome']}}
+                            </option>
+                            {% endif %}
                             {% endfor %}
                         </select>
                     </label>

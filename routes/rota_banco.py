@@ -167,6 +167,7 @@ def put_encomenda(remetente,cliente_id,var_id):
     }
 
     dados = requests.put(url_, json=dados_encomenda)
+
     return dados.json()
 
 def put_galpao(cidade,estado,var_id):
